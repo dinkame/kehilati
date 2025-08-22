@@ -239,11 +239,29 @@
         }
 
         /**
-         * Populates the center filter dropdown with unique center names.
+         * Populates the center filter dropdown with unique center names based on selected neighborhood.
          */
-        function populateCenterFilter() {
-            const centers = [...new Set(activities.map(activity => activity.center))];
+        function populateCenterFilter(selectedNeighborhood = '') {
+            const neighborhoodMap = {
+                "בית ספר מגן": "מעוז אביב",
+                "חוג עצמאי - מעוז אביב": "מעוז אביב",
+                "בית פרנקפורט": "הדר יוסף/נאות אפקה",
+                "המרכז האולימפי": "הדר יוסף/נאות אפקה",
+                "מרכז קהילתי הדר אפקה": "הדר יוסף/נאות אפקה",
+                "קאנטרי נאות אפקה": "הדר יוסף/נאות אפקה",
+                "בית ספר גיל": "הדר יוסף/נאות אפקה"
+            };
+
+            let filteredActivities = activities;
+            if (selectedNeighborhood) {
+                filteredActivities = activities.filter(activity => neighborhoodMap[activity.center] === selectedNeighborhood);
+            }
+
+            const centers = [...new Set(filteredActivities.map(activity => activity.center))];
             centers.sort();
+            
+            centerFilter.innerHTML = '<option value="">כל המרכזים</option>'; // Reset and add default
+            
             centers.forEach(center => {
                 const option = document.createElement('option');
                 option.value = center;
@@ -416,7 +434,10 @@
         dayFilter.addEventListener('change', filterAndRender);
         ageFilter.addEventListener('change', filterAndRender);
         categoryFilter.addEventListener('change', filterAndRender);
-        neighborhoodFilter.addEventListener('change', filterAndRender);
+        neighborhoodFilter.addEventListener('change', () => {
+            populateCenterFilter(neighborhoodFilter.value);
+            filterAndRender();
+        });
 
         // --- INITIALIZATION ---
         setLastUpdatedDate();
