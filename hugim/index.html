@@ -33,7 +33,20 @@
         <header class="text-center mb-8">
             <h1 class="text-4xl md:text-5xl font-bold text-blue-800">לוח החוגים של השכונה</h1>
             <p class="text-lg text-gray-600 mt-2">מצאו את החוג המושלם לילדים במעוז אביב והסביבה</p>
+            <p class="text-sm text-gray-500 mt-2" id="lastUpdated"></p>
         </header>
+
+        <!-- Missing Info Notice -->
+        <div class="bg-yellow-100 border-r-4 border-yellow-500 text-yellow-800 p-4 rounded-md mb-8 shadow" role="alert">
+            <p class="font-bold">שימו לב, האפליקציה עדיין בהרצה!</p>
+            <p>חסר לנו מידע על חוגים מהמקומות הבאים:</p>
+            <ul class="list-disc list-inside mt-2">
+                <li>בית ספר דוד ילין</li>
+                <li>בית ספר אלחריזי</li>
+                <li>המרכז האולימפי (מידע חלקי)</li>
+            </ul>
+            <p class="mt-2">מצאתן משהו שגוי או חסר? נשמח אם תשלחו הודעה לדינה.</p>
+        </div>
 
         <!-- Filters Section -->
         <div class="bg-white p-4 rounded-lg shadow-md mb-8 sticky top-0 z-10">
@@ -318,8 +331,20 @@
         const ageFilter = document.getElementById('ageFilter');
         const categoryFilter = document.getElementById('categoryFilter');
         const noResultsMessage = document.getElementById('noResultsMessage');
+        const lastUpdatedElement = document.getElementById('lastUpdated');
 
         // --- FUNCTIONS ---
+
+        /**
+         * Sets the last updated date.
+         */
+        function setLastUpdatedDate() {
+            const date = new Date();
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            lastUpdatedElement.textContent = `עדכון אחרון: ${day}.${month}.${year}`;
+        }
 
         /**
          * Populates the center filter dropdown with unique center names.
@@ -420,6 +445,7 @@
         categoryFilter.addEventListener('change', filterAndRender);
 
         // --- INITIALIZATION ---
+        setLastUpdatedDate();
         populateCenterFilter();
         renderActivities(activities);
     </script>
