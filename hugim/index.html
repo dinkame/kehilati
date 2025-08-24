@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>לוח חוגים - מעוז אביב והסביבה</title>
+    <title>לוח חוגים - מעוז אביב, הדר יוסף והסביבה</title>
 
    <!-- Social Media Preview Tags -->
-<meta property="og:title" content="לוח החוגים של השכונה - מעוז אביב והסביבה">
-<meta property="og:description" content="מצאו את החוג המושלם לילדים במעוז אביב והסביבה. כל החוגים במקום אחד!">
+<meta property="og:title" content="לוח החוגים של השכונה - מעוז אביב, הדר יוסף והסביבה">
+<meta property="og:description" content="מצאו את החוג המושלם לילדים במעוז אביב, הדר יוסף והסביבה. כל החוגים במקום אחד!">
 <meta property="og:image" content="https://kehilati.claudina.co.il/hugim/hugim-preview.jpg">
 <meta property="og:url" content="https://kehilati.claudina.co.il/hugim/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="לוח החוגים של השכונה - מעוז אביב והסביבה">
-<meta name="twitter:description" content="מצאו את החוג המושלם לילדים במעוז אביב והסביבה. כל החוגים במקום אחד!">
+<meta name="twitter:title" content="לוח החוגים של השכונה - מעוז אביב, הדר יוסף והסביבה">
+<meta name="twitter:description" content="מצאו את החוג המושלם לילדים במעוז אביב, הדר יוסף והסביבה. כל החוגים במקום אחד!">
 <meta name="twitter:image" content="https://kehilati.claudina.co.il/hugim/hugim-preview.jpg">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -43,8 +43,8 @@
     <div class="container mx-auto p-4 md:p-8">
         <!-- Header Section -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-bold text-blue-800">לוח החוגים של השכונה</h1>
-            <p class="text-lg text-gray-600 mt-2">מצאו את החוג המושלם לילדים במעוז אביב והסביבה</p>
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-800">לוח החוגים - מעוז אביב, הדר יוסף והסביבה</h1>
+            <p class="text-lg text-gray-600 mt-2">מצאו את החוג המושלם לילדים במעוז אביב, הדר יוסף והסביבה</p>
             <p class="text-sm text-gray-500 mt-2" id="lastUpdated"></p>
         </header>
 
@@ -56,7 +56,6 @@
                 <li>בית ספר דוד ילין</li>
                 <li>בית ספר אלחריזי</li>
                 <li>המרכז האולימפי (מידע חלקי)</li>
-                <li>מרכז קהילתי נאות אפקה (מידע חלקי)</li>
             </ul>
             <p class="mt-2">מצאתן משהו שגוי או חסר? נשמח אם תשלחו הודעה לדינה.</p>
         </div>
@@ -145,15 +144,29 @@
         // --- DATA SOURCE ---
         const activities = [
             // --- מרכז קהילתי הדר אפקה (Updated) ---
+            { name: "בלט ומחול", instructor: "שלומית קורי", day: "שלישי", age: "גן חובה", time: "17:15 - 18:00", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "בלט ומחול", instructor: "שלומית קורי", day: "שלישי", age: "א'-ג'", time: "18:00 - 18:45", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "כדורסל", instructor: "שקד בוזי / אופק פזואלי", day: "ראשון ורביעי", age: "גנים", time: "16:30 - 17:15", location: "אולם", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "כדורסל", instructor: "שקד בוזי / אופק פזואלי", day: "ראשון ורביעי", age: "א'", time: "16:30 - 17:15", location: "אולם", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "כדורסל", instructor: "שקד בוזי / אופק פזואלי", day: "ראשון ורביעי", age: "ב'-ג'", time: "15:30 - 16:30", location: "אולם", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "כדורסל", instructor: "שקד בוזי / אופק פזואלי", day: "ראשון ורביעי", age: "ד'-ה'", time: "15:15 - 16:30", location: "אולם", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "קפוארה", instructor: "סאפו", day: "שני", age: "גנים (4-6)", time: "16:30 - 17:15", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "קפוארה", instructor: "סאפו", day: "שני", age: "א'-ב'", time: "17:15 - 18:00", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "קפוארה", instructor: "סאפו", day: "שני", age: "ג'-ה'", time: "18:00 - 18:45", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
             { name: "ג'ודו", instructor: "אוריאל קיטנר", day: "רביעי", age: "טרום חובה - חובה", time: "16:45 - 17:30", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "גיטרה", instructor: "אגדת גרוסר", day: "שלישי", age: "כיתות א' - ג'", time: "16:30 - 17:00", location: "סטודיו נעימה", center: "מרכז קהילתי הדר אפקה", category: "העשרה", ageTags: ["יסודי נמוך"], contact: { phone: "052-1234567", person: "אגדת גרוסר" } },
-            { name: "טאקוונדו", instructor: "רענן שנהב", day: "חמישי", age: "חובה - א'", time: "16:45 - 17:30", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "קפוארה", instructor: "סאפו", day: "שני", age: "גנים", time: "16:30 - 17:15", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "אקרובטיקה", instructor: "מכבי דן", day: "שני וחמישי", age: "נבחרת", time: "17:00 - 18:00", location: "אולם", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "בלט ומחול", instructor: "שלומית קורי", day: "שלישי", age: "גן חובה - א'", time: "17:15 - 18:00", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "כדורסל", instructor: "שקד בוזי", day: "ראשון ורביעי", age: "כיתות ב'-ג'", time: "15:30 - 16:30", location: "אולם", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "היפ הופ", instructor: "עומר אפרון", day: "ראשון", age: "כיתות א'-ג'", time: "17:30 - 18:15", location: "סטודיו כניסה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "כיתות ה'-ז'", time: "18:45 - 19:30", location: "סטודיו כניסה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי גבוה", "חטיבה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ג'ודו", instructor: "אוריאל קיטנר", day: "רביעי", age: "א'-ב'", time: "17:30 - 18:15", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ג'ודו", instructor: "אוריאל קיטנר", day: "רביעי", age: "ג' ומעלה", time: "18:15 - 19:00", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך", "יסודי גבוה", "חטיבה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "אקרובטיקה", instructor: "פניני דן", day: "שני וחמישי", age: "נבחרת גן-א'", time: "15:15 - 16:45", location: "אולם", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "היפ הופ", instructor: "עומר אפרון", day: "ראשון", age: "א'-ג'", time: "17:30 - 18:15", location: "סטודיו כניסה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "היפ הופ", instructor: "עומר אפרון", day: "ראשון", age: "ד'-ו'", time: "16:30 - 17:30", location: "סטודיו כניסה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "א'-ב'", time: "16:15 - 17:00", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "ג'-ד'", time: "17:00 - 17:45", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "ה'-ו'", time: "17:45 - 18:30", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "טאקוונדו", instructor: "רענן שנהב", day: "חמישי", age: "חובה-א'", time: "16:45 - 17:30", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "טאקוונדו", instructor: "רענן שנהב", day: "חמישי", age: "ב'-ד'", time: "18:15 - 19:00", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "טאקוונדו", instructor: "רענן שנהב", day: "חמישי", age: "ה'-ו'", time: "19:00 - 20:15", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "סדנת תאטרון", instructor: "תומר יעבקצ'אק", day: "רביעי", age: "ב'-ג'", time: "16:30 - 17:30", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "העשרה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "סדנת תאטרון", instructor: "תומר יעבקצ'אק", day: "רביעי", age: "ד'-ו'", time: "17:30 - 18:30", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "העשרה", ageTags: ["יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
             // --- בית פרנקפורט (Updated) ---
             { name: "כושר קיד", description: "פעילות גופנית המספקת לילדים מרחב להשתחרר, לפרוק אנרגיה ולפתח גוף בריא וחזק.", instructor: "לא צוין", day: "שני", age: "הליכה-2", time: "16:00-16:40", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
             { name: "כושר קיד", description: "פעילות גופנית המספקת לילדים מרחב להשתחרר, לפרוק אנרגיה ולפתח גוף בריא וחזק.", instructor: "לא צוין", day: "שני", age: "גיל 2-3", time: "16:45-17:25", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
