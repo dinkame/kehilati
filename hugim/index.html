@@ -63,9 +63,9 @@
 
         <!-- Filters Section -->
         <div class="bg-white p-4 rounded-lg shadow-md mb-8 sticky top-0 z-10">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <!-- Search Input -->
-                <div class="lg:col-span-1">
+                <div>
                     <label for="searchInput" class="block text-sm font-medium text-gray-700">חיפוש חופשי</label>
                     <input type="text" id="searchInput" placeholder="לדוגמה: כדורסל, אפרת..." class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
                 </div>
@@ -79,11 +79,20 @@
                         <option value="תל ברוך צפון">תל ברוך צפון</option>
                     </select>
                 </div>
+                <!-- Type Filter -->
+                <div>
+                    <label for="typeFilter" class="block text-sm font-medium text-gray-700">סוג פעילות</label>
+                    <select id="typeFilter" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                        <option value="">הכל</option>
+                        <option value="community">מרכזים קהילתיים</option>
+                        <option value="private">פרטיים</option>
+                    </select>
+                </div>
                 <!-- Center Filter -->
                 <div>
-                    <label for="centerFilter" class="block text-sm font-medium text-gray-700">מרכז קהילתי</label>
+                    <label for="centerFilter" class="block text-sm font-medium text-gray-700">שם המקום</label>
                     <select id="centerFilter" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
-                        <option value="">כל המרכזים</option>
+                        <option value="">כל המקומות</option>
                         <!-- Options will be added dynamically -->
                     </select>
                 </div>
@@ -114,7 +123,7 @@
                     </select>
                 </div>
                 <!-- Category Filter -->
-                <div>
+                <div class="lg:col-span-2">
                     <label for="categoryFilter" class="block text-sm font-medium text-gray-700">תחום</label>
                     <select id="categoryFilter" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
                         <option value="">הכל</option>
@@ -123,6 +132,8 @@
                         <option value="אומנות ויצירה">אומנות ויצירה</option>
                         <option value="מחול ותנועה">מחול ותנועה</option>
                         <option value="העשרה">העשרה</option>
+                        <option value="מורים פרטיים">מורים פרטיים</option>
+                        <option value="סדנאות">סדנאות</option>
                     </select>
                 </div>
             </div>
@@ -145,119 +156,132 @@
         // --- DATA SOURCE ---
         const activities = [
             // --- מרכז קהילתי הדר אפקה (Updated) ---
-            { name: "התעמלות התפתחותית", instructor: "נטליה רנדלר", day: "שני", age: "עם הורה 2.5-3.5", time: "16:30-17:15", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "התעמלות התפתחותית", instructor: "נטליה רנדלר", day: "שני", age: "3.5-4.5", time: "17:15-18:00", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "התעמלות התפתחותית", instructor: "נטליה רנדלר", day: "שני", age: "4.5-6", time: "18:00-18:45", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "יוגה בשילוב אנגלית", instructor: "לי סומך", day: "רביעי", age: "2-4", time: "16:45-17:30", location: "סטודיו כניסה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "טרום בלט", instructor: "אורי תלמי", day: "חמישי", age: "טר\"ח", time: "16:30-17:00", location: "לוגי", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "טרום בלט", instructor: "אורי תלמי", day: "חמישי", age: "טרום חובה+חובה", time: "17:00-17:45", location: "לוגי", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "ג'ודו", instructor: "רביב אהרון", day: "שני", age: "טט\"ר+טרום חובה", time: "17:15-18:00", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "ג'ודו", instructor: "רביב אהרון", day: "שני", age: "גן חובה-כיתות ב'", time: "18:00-18:45", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "כדורסל", instructor: "יהלי ברזילי", day: "ראשון", age: "גן חובה", time: "16:30-17:15", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "צעדים ראשונים בבלט", instructor: "שלומית קורי", day: "שלישי", age: "טר\"ח", time: "16:30-17:10", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "בלט ומחול יצירתי", instructor: "שלומית קורי", day: "שלישי", age: "טרום חובה", time: "17:10-17:50", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "בלט ומחול יצירתי", instructor: "שלומית קורי", day: "שלישי", age: "חובה+כיתות א'", time: "17:50-18:35", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "ג'ודו", instructor: "רביב אהרון", day: "שני", age: "כיתות ג' ומעלה", time: "16:30-17:15", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך", "יסודי גבוה", "חטיבה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "כיתות א'-ג'", time: "16:15-17:00", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "כיתות ג'-ד'", time: "17:00-17:45", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "כיתות ה'-ו'", time: "17:45-18:30", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "כדורסל", instructor: "יהלי ברזילי / עמית אורן", day: "ראשון ורביעי", age: "כיתות א'", time: "16:30-17:15", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "כדורסל", instructor: "יהלי ברזילי / עמית אורן", day: "ראשון ורביעי", age: "כיתות ב'-ג'", time: "15:15-16:30", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "אומנות מתחלפת", instructor: "יוליה איזנברג", day: "שלישי", age: "כיתות ב'-ד'", time: "17:00-18:30", location: "לוגי", center: "מרכז קהילתי הדר אפקה", category: "אומנות ויצירה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "טקוואנדו", instructor: "רגען שנהב", day: "חמישי", age: "גן חובה-כיתות א'", time: "16:45-17:30", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "טקוואנדו", instructor: "רגען שנהב", day: "חמישי", age: "כיתות ב'-ד'", time: "18:15-19:00", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "בלט קלאסי", instructor: "קארין רוזן", day: "ראשון", age: "כיתות ג'-ה'", time: "15:30-16:20", location: "לוגי", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "בלט קלאסי", instructor: "קארין רוזן", day: "ראשון", age: "גן חובה+כיתות ב'", time: "16:30-17:20", location: "לוגי", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "אקרובטיקה", instructor: "פניני דן", day: "שני וחמישי", age: "ג'-ד' / א' מתקדמות", time: "15:15-16:45 / 16:45-17:30", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
-            { name: "כדורסל", instructor: "עמית אורן", day: "ראשון ורביעי", age: "נוער", time: "16:30-17:30", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["חטיבה"], contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "התעמלות התפתחותית", instructor: "נטליה רנדלר", day: "שני", age: "עם הורה 2.5-3.5", time: "16:30-17:15", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "התעמלות התפתחותית", instructor: "נטליה רנדלר", day: "שני", age: "3.5-4.5", time: "17:15-18:00", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "התעמלות התפתחותית", instructor: "נטליה רנדלר", day: "שני", age: "4.5-6", time: "18:00-18:45", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "יוגה בשילוב אנגלית", instructor: "לי סומך", day: "רביעי", age: "2-4", time: "16:45-17:30", location: "סטודיו כניסה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "טרום כלי", instructor: "אורי תלמי", day: "חמישי", age: "טר\"ח", time: "16:30-17:00", location: "לוגי", center: "מרכז קהילתי הדר אפקה", category: "העשרה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "טרום כלי", instructor: "אורי תלמי", day: "חמישי", age: "טרום חובה+חובה", time: "17:00-17:45", location: "לוגי", center: "מרכז קהילתי הדר אפקה", category: "העשרה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ג'ודו", instructor: "רביב אהרון", day: "שני", age: "טט\"ר+טרום חובה", time: "17:15-18:00", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ג'ודו", instructor: "רביב אהרון", day: "שני", age: "גן חובה-כיתות ב'", time: "18:00-18:45", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "כדורסל", instructor: "יהלי ברזילי", day: "ראשון", age: "גן חובה", time: "16:30-17:15", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "צעדים ראשונים בבלט", instructor: "שלומית קורי", day: "שלישי", age: "טר\"ח", time: "16:30-17:10", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "בלט ומחול יצירתי", instructor: "שלומית קורי", day: "שלישי", age: "טרום חובה", time: "17:10-17:50", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "בלט ומחול יצירתי", instructor: "שלומית קורי", day: "שלישי", age: "חובה+כיתות א'", time: "17:50-18:35", location: "סטודיו G", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ג'ודו", instructor: "רביב אהרון", day: "שני", age: "כיתות ג' ומעלה", time: "16:30-17:15", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך", "יסודי גבוה", "חטיבה"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "כיתות א'-ג'", time: "16:15-17:00", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "כיתות ג'-ד'", time: "17:00-17:45", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "ערסלים", instructor: "אפרת אהרון", day: "שלישי", age: "כיתות ה'-ו'", time: "17:45-18:30", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי גבוה"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "כדורסל", instructor: "יהלי ברזילי / עמית אורן", day: "ראשון ורביעי", age: "כיתות א'", time: "16:30-17:15", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "כדורסל", instructor: "יהלי ברזילי / עמית אורן", day: "ראשון ורביעי", age: "כיתות ב'-ג'", time: "15:15-16:30", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "אומנות מתחלפת", instructor: "יוליה איזנברג", day: "שלישי", age: "כיתות ב'-ד'", time: "17:00-18:30", location: "לוגי", center: "מרכז קהילתי הדר אפקה", category: "אומנות ויצירה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "טקוואנדו", instructor: "רגען שנהב", day: "חמישי", age: "גן חובה-כיתות א'", time: "16:45-17:30", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "טקוואנדו", instructor: "רגען שנהב", day: "חמישי", age: "כיתות ב'-ד'", time: "18:15-19:00", location: "סטודיו אמנויות לחימה", center: "מרכז קהילתי הדר אפקה", category: "אומנות לחימה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "אקרובטיקה", instructor: "פניני דן", day: "שני וחמישי", age: "ג'-ד' / א' מתקדמות", time: "15:15-16:45 / 16:45-17:30", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
+            { name: "כדורסל", instructor: "עמית אורן", day: "ראשון ורביעי", age: "נוער", time: "16:30-17:30", location: "אולם ספורט", center: "מרכז קהילתי הדר אפקה", category: "ספורט", ageTags: ["חטיבה"], type: "community", contact: { phone: "073-3844015", person: "אוריין קניגסבוך" } },
             // --- בית פרנקפורט (Updated) ---
-            { name: "כושר קיד", description: "פעילות גופנית המספקת לילדים מרחב להשתחרר, לפרוק אנרגיה ולפתח גוף בריא וחזק.", instructor: "לא צוין", day: "שני", age: "הליכה-2", time: "16:00-16:40", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "כושר קיד", description: "פעילות גופנית המספקת לילדים מרחב להשתחרר, לפרוק אנרגיה ולפתח גוף בריא וחזק.", instructor: "לא צוין", day: "שני", age: "גיל 2-3", time: "16:45-17:25", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "הגנה עצמית", instructor: "לא צוין", day: "שלישי", age: "גיל 4-6", time: "16:45-17:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "הגנה עצמית", instructor: "לא צוין", day: "שלישי", age: "כיתות א'-ג'", time: "17:30-18:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "יוגה לילדים", instructor: "לא צוין", day: "שני", age: "ט.חובה-חובה", time: "17:00-17:45", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "קפוארה", instructor: "לא צוין", day: "חמישי", age: "ט.חובה-חובה", time: "17:00-17:45", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "קפוארה", instructor: "לא צוין", day: "חמישי", age: "כיתות א'-ב'", time: "17:45-18:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "כדורסל", instructor: "לא צוין", day: "ראשון", age: "כיתות א'-ב'", time: "17:00-18:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "כדורסל", instructor: "לא צוין", day: "ראשון", age: "כיתות ג'-ד'", time: "18:00-19:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "קרמיקה", description: "הזדמנות לבטא את עצמם בצורה חופשית ויצירתית, לגלות דמיון ולהתנסות בחומרים וטכניקות שונות.", instructor: "לא צוין", day: "ראשון", age: "חובה-א'", time: "17:00-17:45", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות ויצירה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "קרמיקה", description: "הזדמנות לבטא את עצמם בצורה חופשית ויצירתית, לגלות דמיון ולהתנסות בחומרים וטכניקות שונות.", instructor: "לא צוין", day: "ראשון", age: "כיתות ב'-ג'", time: "17:45-18:45", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות ויצירה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "ציור", instructor: "לא צוין", day: "רביעי", age: "ט.חובה-חובה", time: "17:00-17:55", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות ויצירה", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "תפירה ואמנות", instructor: "לא צוין", day: "שני", age: "כיתות ב'-ג'", time: "17:30-18:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות ויצירה", ageTags: ["יסודי נמוך"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "טיסנאות", description: "חוג המעודד לגלות, לשאול, לחקור וללמוד מתוך סקרנות טבעית והנאה.", instructor: "לא צוין", day: "ראשון", age: "מתחילים", time: "17:15-18:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "מבוכים ודרקונים", instructor: "לא צוין", day: "שני", age: "כיתות ד'-ה'", time: "16:00-17:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "העשרה", ageTags: ["יסודי גבוה"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "שף בכיף", instructor: "לא צוין", day: "שלישי", age: "גילי גן", time: "17:00-18:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "העשרה", ageTags: ["גן"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "אילוף כלבים", instructor: "לא צוין", day: "רביעי", age: "כיתות ד'-ו'", time: "16:00-17:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "העשרה", ageTags: ["יסודי גבוה"], contact: { phone: "073-3844009", person: "אבידן דוראל" } },
-            { name: "בלט קלאסי", description: "בית ספר מקצועי למחול לילדים ונוער בהובלה של צוות מורים ומורות מקצועי ומנוסה.", instructor: "גנאל סינטר", day: "ימים ושעות בתיאום", age: "ילדים ונוער", time: "משתנה", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה", "חטיבה"], contact: { phone: "073-3844008", person: "גנאל סינטר" } },
+            { name: "כושר קיד", description: "פעילות גופנית המספקת לילדים מרחב להשתחרר, לפרוק אנרגיה ולפתח גוף בריא וחזק.", instructor: "לא צוין", day: "שני", age: "הליכה-2", time: "16:00-16:40", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["גן"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "כושר קיד", description: "פעילות גופנית המספקת לילדים מרחב להשתחרר, לפרוק אנרגיה ולפתח גוף בריא וחזק.", instructor: "לא צוין", day: "שני", age: "גיל 2-3", time: "16:45-17:25", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["גן"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "הגנה עצמית", instructor: "לא צוין", day: "שלישי", age: "גיל 4-6", time: "16:45-17:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות לחימה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "הגנה עצמית", instructor: "לא צוין", day: "שלישי", age: "כיתות א'-ג'", time: "17:30-18:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "יוגה לילדים", instructor: "לא צוין", day: "שני", age: "ט.חובה-חובה", time: "17:00-17:45", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "קפוארה", instructor: "לא צוין", day: "חמישי", age: "ט.חובה-חובה", time: "17:00-17:45", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות לחימה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "קפוארה", instructor: "לא צוין", day: "חמישי", age: "כיתות א'-ב'", time: "17:45-18:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "כדורסל", instructor: "לא צוין", day: "ראשון", age: "כיתות א'-ב'", time: "17:00-18:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "כדורסל", instructor: "לא צוין", day: "ראשון", age: "כיתות ג'-ד'", time: "18:00-19:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "קרמיקה", description: "הזדמנות לבטא את עצמם בצורה חופשית ויצירתית, לגלות דמיון ולהתנסות בחומרים וטכניקות שונות.", instructor: "לא צוין", day: "ראשון", age: "חובה-א'", time: "17:00-17:45", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות ויצירה", ageTags: ["גן", "יסודי נמוך"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "קרמיקה", description: "הזדמנות לבטא את עצמם בצורה חופשית ויצירתית, לגלות דמיון ולהתנסות בחומרים וטכניקות שונות.", instructor: "לא צוין", day: "ראשון", age: "כיתות ב'-ג'", time: "17:45-18:45", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות ויצירה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "ציור", instructor: "לא צוין", day: "רביעי", age: "ט.חובה-חובה", time: "17:00-17:55", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות ויצירה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "תפירה ואמנות", instructor: "לא צוין", day: "שני", age: "כיתות ב'-ג'", time: "17:30-18:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "אומנות ויצירה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "טיסנאות", description: "חוג המעודד לגלות, לשאול, לחקור וללמוד מתוך סקרנות טבעית והנאה.", instructor: "לא צוין", day: "ראשון", age: "מתחילים", time: "17:15-18:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "מבוכים ודרקונים", instructor: "לא צוין", day: "שני", age: "כיתות ד'-ה'", time: "16:00-17:30", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "העשרה", ageTags: ["יסודי גבוה"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "שף בכיף", instructor: "לא צוין", day: "שלישי", age: "גילי גן", time: "17:00-18:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "העשרה", ageTags: ["גן"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "אילוף כלבים", instructor: "לא צוין", day: "רביעי", age: "כיתות ד'-ו'", time: "16:00-17:00", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "העשרה", ageTags: ["יסודי גבוה"], type: "community", contact: { phone: "073-3844009", person: "אבידן דוראל" } },
+            { name: "בלט קלאסי", description: "בית ספר מקצועי למחול לילדים ונוער בהובלה של צוות מורים ומורות מקצועי ומנוסה.", instructor: "גנאל סינטר", day: "ימים ושעות בתיאום", age: "ילדים ונוער", time: "משתנה", location: "בית פרנקפורט", center: "בית פרנקפורט", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה", "חטיבה"], type: "community", contact: { phone: "073-3844008", person: "גנאל סינטר" } },
             // --- בית ספר גיל ---
-            { name: "ג'ודו", instructor: "איתי", day: "שלישי", age: "ילדי גן (4-6)", time: "16:30-17:15", location: "אולם ספורט", center: "בית ספר גיל", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "052-346-4823", person: "איתי" } },
-            { name: "ג'ודו", instructor: "איתי", day: "שלישי", age: "כיתות א'-ב'", time: "17:15-18:00", location: "אולם ספורט", center: "בית ספר גיל", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], contact: { phone: "052-346-4823", person: "איתי" } },
-            { name: "טניס שולחן (מתחילים)", instructor: "לא צוין", day: "ראשון ורביעי", age: "יסודי", time: "16:30-17:30", location: "חדר פינג פונג", center: "בית ספר גיל", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "052-346-4823", person: "איתי (לבירור)" } },
-            { name: "קבוצת מיומנויות חברתיות CBT", description: "בקבוצה נלמד לזהות רגשות, להבין מצבים חברתיים, לתרגל תקשורת חיובית, פתרון בעיות, נמישות מחשבתית והתמודדות עם דחייה — דרך משחק, שיח, שיקוף ותרגול כלים פרקטיים.", instructor: "לימור ששון בוכמן, מיכל דורון", day: "רביעי", age: "כיתות ב'-ד'", time: "15:00", location: "שלום אש 28", center: "בית ספר גיל", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "054-7611078", person: "לימור/מיכל" } },
-            { name: "קבוצת מיומנויות חברתיות CBT", description: "בקבוצה נלמד לזהות רגשות, להבין מצבים חברתיים, לתרגל תקשורת חיובית, פתרון בעיות, נמישות מחשבתית והתמודדות עם דחייה — דרך משחק, שיח, שיקוף ותרגול כלים פרקטיים.", instructor: "לימור ששון בוכמן, מיכל דורון", day: "רביעי", age: "כיתות ה'-ו'", time: "16:30", location: "שלום אש 28", center: "בית ספר גיל", category: "העשרה", ageTags: ["יסודי גבוה"], contact: { phone: "054-7611078", person: "לימור/מיכל" } },
+            { name: "ג'ודו", instructor: "איתי", day: "שלישי", age: "ילדי גן (4-6)", time: "16:30-17:15", location: "אולם ספורט", center: "בית ספר גיל", category: "אומנות לחימה", ageTags: ["גן"], type: "community", contact: { phone: "052-346-4823", person: "איתי" } },
+            { name: "ג'ודו", instructor: "איתי", day: "שלישי", age: "כיתות א'-ב'", time: "17:15-18:00", location: "אולם ספורט", center: "בית ספר גיל", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "052-346-4823", person: "איתי" } },
+            { name: "טניס שולחן (מתחילים)", instructor: "לא צוין", day: "ראשון ורביעי", age: "יסודי", time: "16:30-17:30", location: "חדר פינג פונג", center: "בית ספר גיל", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "052-346-4823", person: "איתי (לבירור)" } },
+            { name: "קבוצת מיומנויות חברתיות CBT", description: "בקבוצה נלמד לזהות רגשות, להבין מצבים חברתיים, לתרגל תקשורת חיובית, פתרון בעיות, נמישות מחשבתית והתמודדות עם דחייה — דרך משחק, שיח, שיקוף ותרגול כלים פרקטיים.", instructor: "לימור ששון בוכמן, מיכל דורון", day: "רביעי", age: "כיתות ב'-ד'", time: "15:00", location: "שלום אש 28", center: "בית ספר גיל", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "054-7611078", person: "לימור/מיכל" } },
+            { name: "קבוצת מיומנויות חברתיות CBT", description: "בקבוצה נלמד לזהות רגשות, להבין מצבים חברתיים, לתרגל תקשורת חיובית, פתרון בעיות, נמישות מחשבתית והתמודדות עם דחייה — דרך משחק, שיח, שיקוף ותרגול כלים פרקטיים.", instructor: "לימור ששון בוכמן, מיכל דורון", day: "רביעי", age: "כיתות ה'-ו'", time: "16:30", location: "שלום אש 28", center: "בית ספר גיל", category: "העשרה", ageTags: ["יסודי גבוה"], type: "community", contact: { phone: "054-7611078", person: "לימור/מיכל" } },
             // --- המרכז האולימפי ---
-            { name: "התעמלות אומנותית - נבחרות", instructor: "צוות המאמנות", day: "ימים שונים", age: "נבחרות", time: "משתנה", location: "הדר יוסף", center: "המרכז האולימפי", category: "מחול ותנועה", ageTags: ["יסודי גבוה", "חטיבה"], contact: { phone: "03-649-8383", person: "המרכז האולימפי" } },
-            { name: "התעמלות אומנותית - גנים", instructor: "אורטל שוורץ", day: "ימים שונים", age: "גנים", time: "16:00-17:00", location: "הדר יוסף", center: "המרכז האולימפי", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "03-649-8383", person: "המרכז האולימפי" } },
+            { name: "התעמלות אומנותית - נבחרות", instructor: "צוות המאמנות", day: "ימים שונים", age: "נבחרות", time: "משתנה", location: "הדר יוסף", center: "המרכז האולימפי", category: "מחול ותנועה", ageTags: ["יסודי גבוה", "חטיבה"], type: "community", contact: { phone: "03-649-8383", person: "המרכז האולימפי" } },
+            { name: "התעמלות אומנותית - גנים", instructor: "אורטל שוורץ", day: "ימים שונים", age: "גנים", time: "16:00-17:00", location: "הדר יוסף", center: "המרכז האולימפי", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "03-649-8383", person: "המרכז האולימפי" } },
             // --- קאנטרי קהילתי נאות אפקה ---
-            { name: "פרוגרס", instructor: "לא צוין", day: "ראשון", age: "גן טרום טרום חובה", time: "16:30-17:15", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "התעמלות אומנותית", instructor: "לא צוין", day: "שני", age: "כיתות ג'-ד'", time: "16:00-16:45", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "ג'ודו", instructor: "לא צוין", day: "שלישי", age: "כיתות ה'-ו'", time: "16:00-16:45", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "אומנות לחימה", ageTags: ["יסודי גבוה"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "קפוארה", instructor: "לא צוין", day: "רביעי", age: "טרום חובה-חובה", time: "16:30-17:10", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "היפ הופ", instructor: "לא צוין", day: "חמישי", age: "כיתות ג'-ד'", time: "16:30-17:15", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "שחמט", instructor: "לא צוין", day: "שישי", age: "מתחילים", time: "13:30-14:15", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "כדורגל", instructor: "לא צוין", day: "שני וחמישי", age: "כיתות ג'-ד'", time: "15:45-16:30", location: "מתחם חיצוני", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "שחייה - התקדמות", instructor: "צוות המדריכים", day: "ראשון", age: "קבוצת התקדמות", time: "16:45-17:30", location: "בריכה", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "שחייה - צעירים א'", instructor: "צוות המדריכים", day: "שני", age: "קבוצת צעירים", time: "17:30-19:00", location: "בריכה", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "שחייה - נוער ב'", instructor: "צוות המדריכים", day: "רביעי", age: "קבוצת נוער", time: "19:00-20:30", location: "בריכה", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["חטיבה"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
-            { name: "שחייה - קטנטנים", instructor: "צוות המדריכים", day: "חמישי", age: "קבוצת קטנטנים", time: "16:15-17:00", location: "בריכה", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["גן"], contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "פרוגרס", instructor: "לא צוין", day: "ראשון", age: "גן טרום טרום חובה", time: "16:30-17:15", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "התעמלות אומנותית", instructor: "לא צוין", day: "שני", age: "כיתות ג'-ד'", time: "16:00-16:45", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "ג'ודו", instructor: "לא צוין", day: "שלישי", age: "כיתות ה'-ו'", time: "16:00-16:45", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "אומנות לחימה", ageTags: ["יסודי גבוה"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "קפוארה", instructor: "לא צוין", day: "רביעי", age: "טרום חובה-חובה", time: "16:30-17:10", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "אומנות לחימה", ageTags: ["גן"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "היפ הופ", instructor: "לא צוין", day: "חמישי", age: "כיתות ג'-ד'", time: "16:30-17:15", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "שחמט", instructor: "לא צוין", day: "שישי", age: "מתחילים", time: "13:30-14:15", location: "אולם רב תכליתי", center: "קאנטרי נאות אפקה", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "כדורגל", instructor: "לא צוין", day: "שני וחמישי", age: "כיתות ג'-ד'", time: "15:45-16:30", location: "מתחם חיצוני", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "שחייה - התקדמות", instructor: "צוות המדריכים", day: "ראשון", age: "קבוצת התקדמות", time: "16:45-17:30", location: "בריכה", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "שחייה - צעירים א'", instructor: "צוות המדריכים", day: "שני", age: "קבוצת צעירים", time: "17:30-19:00", location: "בריכה", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "שחייה - נוער ב'", instructor: "צוות המדריכים", day: "רביעי", age: "קבוצת נוער", time: "19:00-20:30", location: "בריכה", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["חטיבה"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
+            { name: "שחייה - קטנטנים", instructor: "צוות המדריכים", day: "חמישי", age: "קבוצת קטנטנים", time: "16:15-17:00", location: "בריכה", center: "קאנטרי נאות אפקה", category: "ספורט", ageTags: ["גן"], type: "community", contact: { phone: "03-648-1155", person: "מזכירות הקאנטרי" } },
             // --- בית ספר מגן ---
-            { name: "כדורסל", instructor: "ניב זילברשטיין", day: "שלישי", age: "כיתות א'-ב'", time: "16:30-17:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "03-6475954", email: "office@maccabi.co.il", person: "מכבי תל אביב" } },
-            { name: "כדורסל", instructor: "ניב זילברשטיין", day: "שלישי", age: "כיתה ג'", time: "15:30-16:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "03-6475954", email: "office@maccabi.co.il", person: "מכבי תל אביב" } },
-            { name: "כדורסל", instructor: "ניב זילברשטיין", day: "שלישי", age: "כיתה ד'", time: "14:30-15:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי גבוה"], contact: { phone: "03-6475954", email: "office@maccabi.co.il", person: "מכבי תל אביב" } },
-            { name: "כדורעף", instructor: "נעם אלבז, דימה זים", day: "שני וחמישי", age: "כיתות ג'-ד'", time: "15:30-16:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "052-8391725", person: "נעם אלבז" } },
-            { name: "כדורעף", instructor: "נעם אלבז, דימה זים", day: "שני וחמישי", age: "כיתות ה'-ו'", time: "14:30-15:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי גבוה"], contact: { phone: "052-8391725", person: "נעם אלבז" } },
-            { name: "מדע ורפואה", instructor: "צוות מדריכים", day: "חמישי", age: "גן חובה", time: "17:15-18:00", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["גן"], contact: { phone: "053-929-5311", email: "Madaverfoa.tlv@gmail.com", person: "מדע ורפואה" } },
-            { name: "מדע ורפואה", instructor: "צוות מדריכים", day: "חמישי", age: "כיתות א'-ב'", time: "16:30-17:15", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי נמוך"], contact: { phone: "053-929-5311", email: "Madaverfoa.tlv@gmail.com", person: "מדע ורפואה" } },
-            { name: "טיסנאות", instructor: "עוף גוזל", day: "שלישי", age: "כיתות א'-ג'", time: "16:30-17:15", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי נמוך"], contact: { phone: "050-4602799", person: "עוף גוזל" } },
-            { name: "טיסנאות", instructor: "עוף גוזל", day: "שלישי", age: "כיתות ד'-ו'", time: "14:30-15:30", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי גבוה"], contact: { phone: "050-4602799", person: "עוף גוזל" } },
-            { name: "התעמלות קרקע", instructor: "אדר בונה", day: "שני", age: "גן טרום חובה", time: "17:15-18:00", location: "אולם ספורט", center: "בית ספר מגן", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "052-4489515", person: "אדר בונה" } },
-            { name: "התעמלות קרקע", instructor: "אדר בונה", day: "חמישי", age: "גן חובה", time: "17:15-18:00", location: "אולם ספורט", center: "בית ספר מגן", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "052-4489515", person: "אדר בונה" } },
-            { name: "התעמלות קרקע", instructor: "אדר בונה", day: "שני וחמישי", age: "כיתות א'-ב'", time: "16:30-17:15", location: "אולם ספורט", center: "בית ספר מגן", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], contact: { phone: "052-4489515", person: "אדר בונה" } },
-            { name: "ג'ודו", instructor: "מיכל אפרת", day: "ראשון ורביעי", age: "גן טרום חובה", time: "17:00-17:45", location: "אולם ספורט", center: "בית ספר מגן", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "054-5609075", person: "מיכל אפרת" } },
-            { name: "ג'ודו", instructor: "מיכל אפרת", day: "ראשון ורביעי", age: "כיתות א'-ב'", time: "16:15-17:00", location: "אולם ספורט", center: "בית ספר מגן", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], contact: { phone: "054-5609075", person: "מיכל אפרת" } },
-            { name: "אלקטרוניקה", instructor: "צחי ציפרוט", day: "לא צוין", age: "כיתות א'-ד'", time: "15:30 / 16:30", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "054-6530007", person: "צחי ציפרוט" } },
-            { name: "כדורגל", instructor: "לירון בחאש", day: "שני וחמישי", age: "גן טרום חובה", time: "17:15-18:00", location: "מגרש כדורגל", center: "בית ספר מגן", category: "ספורט", ageTags: ["גן"], contact: { phone: "052-2901032", person: "לירון בחאש" } },
-            { name: "כדורגל", instructor: "לירון בחאש", day: "שני וחמישי", age: "כיתות א'-ב'", time: "16:30-17:15", location: "מגרש כדורגל", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי נמוך"], contact: { phone: "052-2901032", person: "לירון בחאש" } },
-            { name: "שחמט", instructor: "בראש חושב", day: "שלישי", age: "כל הגילאים", time: "16:00-17:30", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "058-5333223", person: "בראש חושב" } },
-            { name: "היפ הופ", instructor: "עילי נאור", day: "רביעי", age: "גן חובה - כיתה א'", time: "17:15-18:00", location: "סטודיו", center: "בית ספר מגן", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "054-7534611", person: "עילי נאור" } },
-            { name: "החלקה על גלגליות", instructor: "נעה", day: "לא צוין", age: "גילאי 5+", time: "17:00-19:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "052-2270742", person: "נעה" } },
-            { name: "קפוארה", instructor: "ברק מחירצ'יק", day: "שני וחמישי", age: "גן (מגיל 4)", time: "17:00-17:45", location: "סטודיו", center: "בית ספר מגן", category: "אומנות לחימה", ageTags: ["גן"], contact: { phone: "052-3843133", person: "ברק מחירצ'יק" } },
-            { name: "פיננספורט", instructor: "משקיעי העתיד", day: "רביעי", age: "כיתות א'-ב'", time: "16:30-17:15", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי נמוך"], contact: { phone: "050-2105989", person: "משקיעי העתיד" } },
+            { name: "כדורסל", instructor: "ניב זילברשטיין", day: "שלישי", age: "כיתות א'-ב'", time: "16:30-17:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "03-6475954", email: "office@maccabi.co.il", person: "מכבי תל אביב" } },
+            { name: "כדורסל", instructor: "ניב זילברשטיין", day: "שלישי", age: "כיתה ג'", time: "15:30-16:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "03-6475954", email: "office@maccabi.co.il", person: "מכבי תל אביב" } },
+            { name: "כדורסל", instructor: "ניב זילברשטיין", day: "שלישי", age: "כיתה ד'", time: "14:30-15:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי גבוה"], type: "community", contact: { phone: "03-6475954", email: "office@maccabi.co.il", person: "מכבי תל אביב" } },
+            { name: "כדורעף", instructor: "נעם אלבז, דימה זים", day: "שני וחמישי", age: "כיתות ג'-ד'", time: "15:30-16:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "052-8391725", person: "נעם אלבז" } },
+            { name: "כדורעף", instructor: "נעם אלבז, דימה זים", day: "שני וחמישי", age: "כיתות ה'-ו'", time: "14:30-15:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי גבוה"], type: "community", contact: { phone: "052-8391725", person: "נעם אלבז" } },
+            { name: "מדע ורפואה", instructor: "צוות מדריכים", day: "חמישי", age: "גן חובה", time: "17:15-18:00", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["גן"], type: "community", contact: { phone: "053-929-5311", email: "Madaverfoa.tlv@gmail.com", person: "מדע ורפואה" } },
+            { name: "מדע ורפואה", instructor: "צוות מדריכים", day: "חמישי", age: "כיתות א'-ב'", time: "16:30-17:15", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "053-929-5311", email: "Madaverfoa.tlv@gmail.com", person: "מדע ורפואה" } },
+            { name: "טיסנאות", instructor: "עוף גוזל", day: "שלישי", age: "כיתות א'-ג'", time: "16:30-17:15", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "050-4602799", person: "עוף גוזל" } },
+            { name: "טיסנאות", instructor: "עוף גוזל", day: "שלישי", age: "כיתות ד'-ו'", time: "14:30-15:30", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי גבוה"], type: "community", contact: { phone: "050-4602799", person: "עוף גוזל" } },
+            { name: "התעמלות קרקע", instructor: "אדר בונה", day: "שני", age: "גן טרום חובה", time: "17:15-18:00", location: "אולם ספורט", center: "בית ספר מגן", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "052-4489515", person: "אדר בונה" } },
+            { name: "התעמלות קרקע", instructor: "אדר בונה", day: "חמישי", age: "גן חובה", time: "17:15-18:00", location: "אולם ספורט", center: "בית ספר מגן", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "052-4489515", person: "אדר בונה" } },
+            { name: "התעמלות קרקע", instructor: "אדר בונה", day: "שני וחמישי", age: "כיתות א'-ב'", time: "16:30-17:15", location: "אולם ספורט", center: "בית ספר מגן", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "052-4489515", person: "אדר בונה" } },
+            { name: "ג'ודו", instructor: "מיכל אפרת", day: "ראשון ורביעי", age: "גן טרום חובה", time: "17:00-17:45", location: "אולם ספורט", center: "בית ספר מגן", category: "אומנות לחימה", ageTags: ["גן"], type: "community", contact: { phone: "054-5609075", person: "מיכל אפרת" } },
+            { name: "ג'ודו", instructor: "מיכל אפרת", day: "ראשון ורביעי", age: "כיתות א'-ב'", time: "16:15-17:00", location: "אולם ספורט", center: "בית ספר מגן", category: "אומנות לחימה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "054-5609075", person: "מיכל אפרת" } },
+            { name: "אלקטרוניקה", instructor: "צחי ציפרוט", day: "לא צוין", age: "כיתות א'-ד'", time: "15:30 / 16:30", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "054-6530007", person: "צחי ציפרוט" } },
+            { name: "כדורגל", instructor: "לירון בחאש", day: "שני וחמישי", age: "גן טרום חובה", time: "17:15-18:00", location: "מגרש כדורגל", center: "בית ספר מגן", category: "ספורט", ageTags: ["גן"], type: "community", contact: { phone: "052-2901032", person: "לירון בחאש" } },
+            { name: "כדורגל", instructor: "לירון בחאש", day: "שני וחמישי", age: "כיתות א'-ב'", time: "16:30-17:15", location: "מגרש כדורגל", center: "בית ספר מגן", category: "ספורט", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "052-2901032", person: "לירון בחאש" } },
+            { name: "שחמט", instructor: "בראש חושב", day: "שלישי", age: "כל הגילאים", time: "16:00-17:30", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "058-5333223", person: "בראש חושב" } },
+            { name: "היפ הופ", instructor: "עילי נאור", day: "רביעי", age: "גן חובה - כיתה א'", time: "17:15-18:00", location: "סטודיו", center: "בית ספר מגן", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], type: "community", contact: { phone: "054-7534611", person: "עילי נאור" } },
+            { name: "החלקה על גלגליות", instructor: "נעה", day: "לא צוין", age: "גילאי 5+", time: "17:00-19:30", location: "אולם ספורט", center: "בית ספר מגן", category: "ספורט", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "052-2270742", person: "נעה" } },
+            { name: "קפוארה", instructor: "ברק מחירצ'יק", day: "שני וחמישי", age: "גן (מגיל 4)", time: "17:00-17:45", location: "סטודיו", center: "בית ספר מגן", category: "אומנות לחימה", ageTags: ["גן"], type: "community", contact: { phone: "052-3843133", person: "ברק מחירצ'יק" } },
+            { name: "פיננספורט", instructor: "משקיעי העתיד", day: "רביעי", age: "כיתות א'-ב'", time: "16:30-17:15", location: "כיתה", center: "בית ספר מגן", category: "העשרה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "050-2105989", person: "משקיעי העתיד" } },
             // --- חוגים עצמאיים ---
-            { name: "יוגה לילדותים", instructor: "הגר", day: "ימים ושעות בתיאום", age: "גילאי גן ויסודי", time: "אחה\"צ", location: "מעוז אביב", center: "חוג עצמאי - מעוז אביב", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], contact: { phone: "054-4623017", person: "הגר" } },
+            { name: "יוגה לילדותים", instructor: "הגר", day: "ימים ושעות בתיאום", age: "גילאי גן ויסודי", time: "אחה\"צ", location: "מעוז אביב", center: "חוג עצמאי - מעוז אביב", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך"], type: "private", contact: { phone: "054-4623017", person: "הגר" } },
             // --- מרכז נעמי שמר (New) ---
-            { name: "ג'ודו", instructor: "בן אל", day: "שני וחמישי", age: "גילאי 4+", time: "16:00-19:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "052-8600754", person: "בן אל" } },
-            { name: "כדורסל", instructor: "מכבי ת\"א", day: "ראשון ורביעי", age: "גן - ו'", time: "14:30-18:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "03-6475954", person: "מכבי ת\"א" } },
-            { name: "תיאטרון", instructor: "ג'וש", day: "שני", age: "ילדים", time: "16:30-18:45", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "052-8710710", person: "ג'וש" } },
-            { name: "התעמלות קרקע ומכשירים", instructor: "גיל", day: "שלישי", age: "ילדים", time: "15:00-17:45", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "03-6484728", person: "גיל" } },
-            { name: "כדוריד", instructor: "אבי", day: "ראשון, שלישי, חמישי", age: "ילדים", time: "15:30-18:00", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "052-2571045", person: "אבי" } },
-            { name: "היפ הופ", instructor: "דפנה", day: "רביעי", age: "כיתות ג' ומעלה", time: "14:45-16:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "054-4403435", person: "דפנה" } },
-            { name: "מחול יצירתי", instructor: "דפנה", day: "רביעי", age: "גילאי 3-6", time: "16:30-18:00", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "מחול ותנועה", ageTags: ["גן"], contact: { phone: "054-4403435", person: "דפנה" } },
-            { name: "התעמלות אומנותית", instructor: "אנה", day: "ראשון", age: "ילדים", time: "16:00-19:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "050-7631666", person: "אנה" } },
-            { name: "טאקוונדו", instructor: "גבריאל", day: "שלישי", age: "ילדים", time: "16:30-20:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "050-6942002", person: "גבריאל" } },
-            { name: "התעמלות התפתחותית", instructor: "ניבה", day: "שני", age: "גיל הרך", time: "16:15-19:00", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["גן"], contact: { phone: "050-8555467", person: "ניבה" } },
-            { name: "כדורגל", instructor: "מוטי", day: "חמישי", age: "גילאי 4-12", time: "15:30-17:45", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "052-9777777", person: "מוטי" } },
-            { name: "קפוארה", instructor: "אלון", day: "חמישי", age: "ילדים", time: "17:00-19:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "054-5842210", person: "אלון" } },
-            { name: "רובוטיקה ולגו", instructor: "אסף", day: "רביעי", age: "ילדים", time: "15:30-17:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "054-8855672", person: "אסף" } },
-            { name: "תכשיטנות ויצירה", instructor: "מגל", day: "חמישי", age: "כיתות א'-ו'", time: "17:15-18:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "אומנות ויצירה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "050-4050526", person: "מגל" } },
-            { name: "חינוך פיננסי", instructor: "תאיר", day: "חמישי", age: "כיתות א'-ו'", time: "14:30-17:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "054-2616344", person: "תאיר" } },
-            { name: "טניס שולחן", instructor: "טל", day: "חמישי", age: "כיתה ב' ומעלה", time: "16:30-18:00", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "054-2777667", person: "טל" } },
-            { name: "שחמט", instructor: "רועי", day: "שני", age: "ילדים", time: "16:00-17:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], contact: { phone: "058-5333223", person: "רועי" } },
-            { name: "מדע ורפואה", instructor: "עידו", day: "שלישי", age: "ילדים", time: "16:30-17:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "054-8064644", person: "עידו" } },
+            { name: "ג'ודו", instructor: "בן אל", day: "שני וחמישי", age: "גילאי 4+", time: "16:00-19:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "052-8600754", person: "בן אל" } },
+            { name: "כדורסל", instructor: "מכבי ת\"א", day: "ראשון ורביעי", age: "גן - ו'", time: "14:30-18:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "03-6475954", person: "מכבי ת\"א" } },
+            { name: "תיאטרון", instructor: "ג'וש", day: "שני", age: "ילדים", time: "16:30-18:45", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "052-8710710", person: "ג'וש" } },
+            { name: "התעמלות קרקע ומכשירים", instructor: "גיל", day: "שלישי", age: "ילדים", time: "15:00-17:45", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "03-6484728", person: "גיל" } },
+            { name: "כדוריד", instructor: "אבי", day: "ראשון, שלישי, חמישי", age: "ילדים", time: "15:30-18:00", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "052-2571045", person: "אבי" } },
+            { name: "היפ הופ", instructor: "דפנה", day: "רביעי", age: "כיתות ג' ומעלה", time: "14:45-16:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "054-4403435", person: "דפנה" } },
+            { name: "מחול יצירתי", instructor: "דפנה", day: "רביעי", age: "גילאי 3-6", time: "16:30-18:00", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "מחול ותנועה", ageTags: ["גן"], type: "community", contact: { phone: "054-4403435", person: "דפנה" } },
+            { name: "התעמלות אומנותית", instructor: "אנה", day: "ראשון", age: "ילדים", time: "16:00-19:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "מחול ותנועה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "050-7631666", person: "אנה" } },
+            { name: "טאקוונדו", instructor: "גבריאל", day: "שלישי", age: "ילדים", time: "16:30-20:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "050-6942002", person: "גבריאל" } },
+            { name: "התעמלות התפתחותית", instructor: "ניבה", day: "שני", age: "גיל הרך", time: "16:15-19:00", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["גן"], type: "community", contact: { phone: "050-8555467", person: "ניבה" } },
+            { name: "כדורגל", instructor: "מוטי", day: "חמישי", age: "גילאי 4-12", time: "15:30-17:45", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "052-9777777", person: "מוטי" } },
+            { name: "קפוארה", instructor: "אלון", day: "חמישי", age: "ילדים", time: "17:00-19:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "אומנות לחימה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "054-5842210", person: "אלון" } },
+            { name: "רובוטיקה ולגו", instructor: "אסף", day: "רביעי", age: "ילדים", time: "15:30-17:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "054-8855672", person: "אסף" } },
+            { name: "תכשיטנות ויצירה", instructor: "מגל", day: "חמישי", age: "כיתות א'-ו'", time: "17:15-18:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "אומנות ויצירה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "050-4050526", person: "מגל" } },
+            { name: "חינוך פיננסי", instructor: "תאיר", day: "חמישי", age: "כיתות א'-ו'", time: "14:30-17:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "054-2616344", person: "תאיר" } },
+            { name: "טניס שולחן", instructor: "טל", day: "חמישי", age: "כיתה ב' ומעלה", time: "16:30-18:00", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "ספורט", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "054-2777667", person: "טל" } },
+            { name: "שחמט", instructor: "רועי", day: "שני", age: "ילדים", time: "16:00-17:30", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "058-5333223", person: "רועי" } },
+            { name: "מדע ורפואה", instructor: "עידו", day: "שלישי", age: "ילדים", time: "16:30-17:15", location: "אהרון בקר 10", center: "מרכז ספורט והעשרה נעמי שמר", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "054-8064644", person: "עידו" } },
             // --- להקת אביב מחולות ---
-            { name: "להקת עלעלים", instructor: "הדר זימברג", day: "שני וחמישי", age: "כיתות א'-ב'", time: "16:30-18:00", location: "אולם בי\"ס דוד ילין", center: "בית ספר דוד ילין", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], contact: { phone: "054-4592523", person: "הדר זימברג" } },
-            { name: "להקת ניצנים", instructor: "רותם מלר", day: "שני וחמישי", age: "כיתות ג'-ד'", time: "16:30-18:00", location: "אולם בי\"ס גיל", center: "בית ספר גיל", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], contact: { phone: "052-8907276", person: "רותם מלר" } },
-            { name: "להקת עלומים", instructor: "רותם מלר", day: "שני וחמישי", age: "כיתות ה'-ז'", time: "18:00-20:00", location: "אולם בי\"ס גיל", center: "בית ספר גיל", category: "מחול ותנועה", ageTags: ["יסודי גבוה", "חטיבה"], contact: { phone: "052-8907276", person: "רותם מלר" } }
+            { name: "להקת עלעלים (אביב מחולות)", instructor: "הדר זימברג", day: "שני וחמישי", age: "כיתות א'-ב'", time: "16:30-18:00", location: "אולם בי\"ס דוד ילין", center: "בית ספר דוד ילין", category: "מחול ותנועה", ageTags: ["יסודי נמוך"], type: "community", contact: { phone: "054-4592523", person: "הדר זימברג" } },
+            { name: "להקת ניצנים (אביב מחולות)", instructor: "רותם מלר", day: "שני וחמישי", age: "כיתות ג'-ד'", time: "16:30-18:00", location: "אולם בי\"ס גיל", center: "בית ספר גיל", category: "מחול ותנועה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "community", contact: { phone: "052-8907276", person: "רותם מלר" } },
+            { name: "להקת עלומים (אביב מחולות)", instructor: "רותם מלר", day: "שני וחמישי", age: "כיתות ה'-ז'", time: "18:00-20:00", location: "אולם בי\"ס גיל", center: "בית ספר גיל", category: "מחול ותנועה", ageTags: ["יסודי גבוה", "חטיבה"], type: "community", contact: { phone: "052-8907276", person: "רותם מלר" } },
+            // --- New Additions ---
+            { name: "שיעורי פסנתר", instructor: "אסי מנדל", day: "בתיאום אישי", age: "כל הגילאים", time: "משתנה", location: "הדר יוסף", center: "מורים פרטיים - הדר יוסף", category: "מורים פרטיים", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה", "חטיבה"], type: "private", contact: { phone: "054-6666678", person: "אסי מנדל" } },
+            { name: "שיעורי פסנתר", instructor: "אורלי", day: "בתיאום אישי", age: "כל הגילאים", time: "משתנה", location: "מעוז אביב", center: "מורים פרטיים - מעוז אביב", category: "מורים פרטיים", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה", "חטיבה"], type: "private", contact: { phone: "לא צוין", person: "אורלי" } },
+            { name: "סטודיו לצביעת קרמיקה", instructor: "Creata", day: "משתנה", age: "כל הגילאים", time: "משתנה", location: "קהילת ורשה 74", center: "Creata", category: "סדנאות", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה", "חטיבה"], type: "private", contact: { whatsapp: "972504439399", person: "Creata" } },
+            { name: "סדנאות יצירה בחצר", instructor: "יוליה - סטודיו לא מושלם", day: "משתנה", age: "כל הגילאים", time: "משתנה", location: "הדר יוסף", center: "סטודיו לא מושלם", category: "סדנאות", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה", "חטיבה"], type: "private", contact: { whatsappGroup: "https://chat.whatsapp.com/Lr43Qbv93ktK5tizWUi7Vd", person: "הצטרפות לקבוצה" } },
+            { name: "מייקרים עם סטייל", instructor: "Craftoola", day: "רביעי, חמישי", age: "כיתות א'-ג'", time: "16:00-17:30", location: "קהילת סלוניקי 1", center: "Craftoola", category: "אומנות ויצירה", ageTags: ["יסודי נמוך"], type: "private", contact: { phone: "055-566-7903", person: "Craftoola" } },
+            { name: "מייקרים עם סטייל לנוער", instructor: "Craftoola", day: "שני, רביעי, חמישי", age: "כיתות ד'-ז'", time: "16:00-19:00", location: "קהילת סלוניקי 1", center: "Craftoola", category: "אומנות ויצירה", ageTags: ["יסודי גבוה", "חטיבה"], type: "private", contact: { phone: "055-566-7903", person: "Craftoola" } },
+            { name: "מייקריות עם סטייל לנערות", instructor: "Craftoola", day: "ראשון", age: "כיתות ז'-י\"ב", time: "16:00-18:00", location: "קהילת סלוניקי 1", center: "Craftoola", category: "אומנות ויצירה", ageTags: ["חטיבה"], type: "private", contact: { phone: "055-566-7903", person: "Craftoola" } },
+            { name: "מיניאטורות – מינילאב", instructor: "Craftoola", day: "שני", age: "כיתות ד'-ח'", time: "15:30-17:30", location: "קהילת סלוניקי 1", center: "Craftoola", category: "אומנות ויצירה", ageTags: ["יסודי גבוה", "חטיבה"], type: "private", contact: { phone: "055-566-7903", person: "Craftoola" } },
+            { name: "שח-MAKE (שחמט עם טוויסט)", instructor: "Craftoola", day: "רביעי", age: "כיתות א'-ו'", time: "17:00-18:00", location: "קהילת סלוניקי 1", center: "Craftoola", category: "העשרה", ageTags: ["יסודי נמוך", "יסודי גבוה"], type: "private", contact: { phone: "055-566-7903", person: "Craftoola" } },
+            { name: "מתמטיקה בידיים (הורה וילד)", instructor: "Craftoola", day: "ראשון", age: "כיתות א'-ג'", time: "17:30-18:30", location: "קהילת סלוניקי 1", center: "Craftoola", category: "העשרה", ageTags: ["יסודי נמוך"], type: "private", contact: { phone: "055-566-7903", person: "Craftoola" } },
+            { name: "גשר לחטיבה", instructor: "Craftoola", day: "רביעי", age: "כיתה ו'", time: "16:00-17:00", location: "קהילת סלוניקי 1", center: "Craftoola", category: "העשרה", ageTags: ["יסודי גבוה"], type: "private", contact: { phone: "055-566-7903", person: "Craftoola" } },
+            { name: "כיתה פתוחה – מתמטיקה", instructor: "Craftoola", day: "ראשון, רביעי", age: "כיתות ז'-י\"ב", time: "15:30-17:30", location: "קהילת סלוניקי 1", center: "Craftoola", category: "העשרה", ageTags: ["חטיבה"], type: "private", contact: { phone: "055-566-7903", person: "Craftoola" } },
+            { name: "סדנאות הדפס וליבוד", instructor: "סטודיו סומו", day: "משתנה", age: "כל הגילאים", time: "משתנה", location: "יהודה סומו 10", center: "סטודיו סומו", category: "סדנאות", ageTags: ["גן", "יסודי נמוך", "יסודי גבוה", "חטיבה"], type: "private", contact: { whatsapp: "972545939793", person: "אביטל מאיר" } },
+            { name: "סדנאות מקרמה ויצירה", instructor: "מור", day: "בתיאום אישי", age: "נערות", time: "משתנה", location: "מעוז אביב", center: "הסדנאות של מורי", category: "סדנאות", ageTags: ["יסודי גבוה", "חטיבה"], type: "private", contact: { phone: "0505333593", person: "מור" } }
         ];
 
         // --- DOM ELEMENTS ---
@@ -268,6 +292,7 @@
         const ageFilter = document.getElementById('ageFilter');
         const categoryFilter = document.getElementById('categoryFilter');
         const neighborhoodFilter = document.getElementById('neighborhoodFilter');
+        const typeFilter = document.getElementById('typeFilter');
         const noResultsMessage = document.getElementById('noResultsMessage');
         const lastUpdatedElement = document.getElementById('lastUpdated');
 
@@ -287,28 +312,38 @@
         /**
          * Populates the center filter dropdown with unique center names based on selected neighborhood.
          */
-        function populateCenterFilter(selectedNeighborhood = '') {
+        function populateCenterFilter(selectedNeighborhood = '', selectedType = '') {
             const neighborhoodMap = {
                 "בית ספר מגן": "מעוז אביב",
                 "חוג עצמאי - מעוז אביב": "מעוז אביב",
+                "מורים פרטיים - מעוז אביב": "מעוז אביב",
+                "הסדנאות של מורי": "מעוז אביב",
                 "בית פרנקפורט": "הדר יוסף/נאות אפקה",
                 "המרכז האולימפי": "הדר יוסף/נאות אפקה",
                 "מרכז קהילתי הדר אפקה": "הדר יוסף/נאות אפקה",
                 "קאנטרי נאות אפקה": "הדר יוסף/נאות אפקה",
                 "בית ספר גיל": "הדר יוסף/נאות אפקה",
                 "בית ספר דוד ילין": "הדר יוסף/נאות אפקה",
+                "מורים פרטיים - הדר יוסף": "הדר יוסף/נאות אפקה",
+                "Craftoola": "הדר יוסף/נאות אפקה",
+                "Creata": "הדר יוסף/נאות אפקה",
+                "סטודיו לא מושלם": "הדר יוסף/נאות אפקה",
+                "סטודיו סומו": "הדר יוסף/נאות אפקה",
                 "מרכז ספורט והעשרה נעמי שמר": "תל ברוך צפון"
             };
 
             let filteredActivities = activities;
             if (selectedNeighborhood) {
-                filteredActivities = activities.filter(activity => neighborhoodMap[activity.center] === selectedNeighborhood);
+                filteredActivities = filteredActivities.filter(activity => neighborhoodMap[activity.center] === selectedNeighborhood);
+            }
+            if (selectedType) {
+                filteredActivities = filteredActivities.filter(activity => activity.type === selectedType);
             }
 
             const centers = [...new Set(filteredActivities.map(activity => activity.center))];
             centers.sort();
             
-            centerFilter.innerHTML = '<option value="">כל המרכזים</option>'; // Reset and add default
+            centerFilter.innerHTML = '<option value="">כל המקומות</option>'; // Reset and add default
             
             centers.forEach(center => {
                 const option = document.createElement('option');
@@ -327,12 +362,19 @@
             const neighborhoodMap = {
                 "בית ספר מגן": "מעוז אביב",
                 "חוג עצמאי - מעוז אביב": "מעוז אביב",
+                "מורים פרטיים - מעוז אביב": "מעוז אביב",
+                "הסדנאות של מורי": "מעוז אביב",
                 "בית פרנקפורט": "הדר יוסף/נאות אפקה",
                 "המרכז האולימפי": "הדר יוסף/נאות אפקה",
                 "מרכז קהילתי הדר אפקה": "הדר יוסף/נאות אפקה",
                 "קאנטרי נאות אפקה": "הדר יוסף/נאות אפקה",
                 "בית ספר גיל": "הדר יוסף/נאות אפקה",
                 "בית ספר דוד ילין": "הדר יוסף/נאות אפקה",
+                "מורים פרטיים - הדר יוסף": "הדר יוסף/נאות אפקה",
+                "Craftoola": "הדר יוסף/נאות אפקה",
+                "Creata": "הדר יוסף/נאות אפקה",
+                "סטודיו לא מושלם": "הדר יוסף/נאות אפקה",
+                "סטודיו סומו": "הדר יוסף/נאות אפקה",
                 "מרכז ספורט והעשרה נעמי שמר": "תל ברוך צפון"
             };
 
@@ -349,6 +391,7 @@
                         contact: activity.contact,
                         description: activity.description,
                         neighborhood: neighborhoodMap[activity.center] || null,
+                        type: activity.type,
                         groups: [],
                         allAgeTags: new Set(),
                         allDays: new Set()
@@ -422,6 +465,20 @@
                             <span>שלח מייל</span>
                         </a>`;
                 }
+                if (activity.contact && activity.contact.whatsapp) {
+                    contactHtml += `
+                        <a href="https://wa.me/${activity.contact.whatsapp}" target="_blank" class="flex-1 text-center block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.654 4.515 1.965 6.397l-1.566 5.722 5.86-1.532z"/></svg>
+                            <span>שלח וואטסאפ</span>
+                        </a>`;
+                }
+                if (activity.contact && activity.contact.whatsappGroup) {
+                    contactHtml += `
+                        <a href="${activity.contact.whatsappGroup}" target="_blank" class="flex-1 text-center block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.654 4.515 1.965 6.397l-1.566 5.722 5.86-1.532z"/></svg>
+                            <span>${activity.contact.person}</span>
+                        </a>`;
+                }
 
 
                 card.innerHTML = `
@@ -463,6 +520,7 @@
             const selectedAge = ageFilter.value;
             const selectedCategory = categoryFilter.value;
             const selectedNeighborhood = neighborhoodFilter.value;
+            const selectedType = typeFilter.value;
 
             const filtered = groupedActivities.filter(activity => {
                 const matchesSearch = activity.name.toLowerCase().includes(searchTerm) || activity.instructor.toLowerCase().includes(searchTerm);
@@ -471,8 +529,9 @@
                 const matchesAge = !selectedAge || activity.allAgeTags.includes(selectedAge);
                 const matchesCategory = !selectedCategory || activity.category === selectedCategory;
                 const matchesNeighborhood = !selectedNeighborhood || activity.neighborhood === selectedNeighborhood;
+                const matchesType = !selectedType || activity.type === selectedType;
 
-                return matchesSearch && matchesCenter && matchesDay && matchesAge && matchesCategory && matchesNeighborhood;
+                return matchesSearch && matchesCenter && matchesDay && matchesAge && matchesCategory && matchesNeighborhood && matchesType;
             });
 
             renderActivities(filtered);
@@ -484,8 +543,12 @@
         dayFilter.addEventListener('change', filterAndRender);
         ageFilter.addEventListener('change', filterAndRender);
         categoryFilter.addEventListener('change', filterAndRender);
+        typeFilter.addEventListener('change', () => {
+            populateCenterFilter(neighborhoodFilter.value, typeFilter.value);
+            filterAndRender();
+        });
         neighborhoodFilter.addEventListener('change', () => {
-            populateCenterFilter(neighborhoodFilter.value);
+            populateCenterFilter(neighborhoodFilter.value, typeFilter.value);
             filterAndRender();
         });
 
