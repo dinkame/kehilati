@@ -171,6 +171,9 @@
         // Global variables for data
         let activitiesData = null;
         let filterValues = null;
+        
+        // Auto-hide filter on scroll for mobile
+        let lastScrollY = 0;
 
         // DOM elements
         const loadingOverlay = document.getElementById('loading-overlay');
@@ -235,6 +238,19 @@
             const today = new Date();
             const dateString = today.toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit', year: 'numeric' });
             lastUpdatedEl.textContent = `עדכון אחרון: ${dateString}`;
+
+            // Auto-hide filter on scroll for mobile
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                const isMobile = window.innerWidth < 768;
+                
+                if (isMobile && currentScrollY > lastScrollY && currentScrollY > 100) {
+                    // Scrolling down and past 100px - hide filter
+                    filterSection.style.display = 'none';
+                }
+                
+                lastScrollY = currentScrollY;
+            });
 
             // Load data and set up filters and rendering
             populateFilters();
