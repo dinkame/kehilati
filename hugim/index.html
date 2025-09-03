@@ -438,8 +438,11 @@
         // Main function to filter and render activities
         function renderActivities() {
             if (!activitiesData || !filterData) {
+                console.log('No data available yet');
                 return;
             }
+
+            console.log('Rendering activities. Total count:', activitiesData.length);
 
             // Get filter values
             const searchTerm = searchInput.value.toLowerCase().trim();
@@ -449,9 +452,23 @@
             const selectedAgeGroupId = ageGroupSelect.value;
             const selectedCategoryId = categorySelect.value;
 
+            console.log('Filter values:', {
+                searchTerm,
+                selectedNeighborhoodId,
+                selectedCenterId,
+                selectedDay,
+                selectedAgeGroupId,
+                selectedCategoryId
+            });
+
             // Filter the activities
             const filteredActivities = activitiesData.filter(classInstance => {
                 const template = classInstance.class_templates;
+                
+                // Check if template exists and is active
+                if (!template || template.is_active === false) {
+                    return false;
+                }
                 
                 // Search term filter
                 if (searchTerm) {
@@ -496,8 +513,11 @@
                 return true;
             });
 
+            console.log('Filtered activities count:', filteredActivities.length);
+
             // Group activities by template for display
             const groupedActivities = groupActivitiesByTemplate(filteredActivities);
+            console.log('Grouped activities count:', groupedActivities.length);
 
             // Clear previous results
             activitiesGrid.innerHTML = '';
