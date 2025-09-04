@@ -313,6 +313,7 @@
                             age_min,
                             age_max,
                             base_price,
+                            is_active,
                             categories (name),
                             age_groups (label)
                         ),
@@ -322,12 +323,48 @@
                             neighborhoods (name)
                         )
                     `)
-                    .eq('is_active', true)
-                    .eq('class_templates.is_active', true);
+                    .eq('is_active', true);
 
                 if (error) throw error;
 
                 activitiesData = data || [];
+                
+                // Debug logging
+                console.log('Loaded activities count:', activitiesData.length);
+                console.log('Sample activities:', activitiesData.slice(0, 3));
+                
+                // Check for football specifically
+                const footballClasses = activitiesData.filter(activity => 
+                    activity.class_templates?.name?.includes('כדורגל') ||
+                    activity.class_templates?.name?.includes('football')
+                );
+                console.log('Football classes found:', footballClasses.length, footballClasses);
+                
+                // Show neighborhood distribution
+                const neighborhoodStats = {};
+                const centerStats = {};
+                activitiesData.forEach(activity => {
+                    const centerNeighborhood = activity.centers?.neighborhoods?.name || 'No center neighborhood';
+                    const instanceNeighborhood = activity.neighborhood || 'No instance neighborhood';
+                    const centerName = activity.centers?.name || 'No center';
+                    
+                    neighborhoodStats[centerNeighborhood] = (neighborhoodStats[centerNeighborhood] || 0) + 1;
+                    centerStats[centerName] = (centerStats[centerName] || 0) + 1;
+                });
+                console.log('Classes by center neighborhood:', neighborhoodStats);
+                console.log('Classes by center:', centerStats);
+
+                // Show first few activities with their data structure
+                console.log('Sample activities with full structure:', 
+                    activitiesData.slice(0, 3).map(activity => ({
+                        className: activity.class_templates?.name,
+                        centerName: activity.centers?.name,
+                        centerNeighborhoodId: activity.centers?.neighborhood_id,
+                        centerNeighborhoodName: activity.centers?.neighborhoods?.name,
+                        instanceNeighborhood: activity.neighborhood,
+                        centerId: activity.center_id
+                    }))
+                );
                 
             } catch (error) {
                 console.error('Error loading classes:', error);
@@ -461,25 +498,6 @@
                 selectedCategoryId
             });
 
-            // TEMPORARY: Skip all filtering to see if data displays at all
-            if (searchTerm === '' && !selectedNeighborhoodId && !selectedCenterId && !selectedDay && !selectedAgeGroupId && !selectedCategoryId) {
-                console.log('No filters applied - showing all activities');
-                const groupedActivities = groupActivitiesByTemplate(activitiesData);
-                console.log('Grouped activities count (no filter):', groupedActivities.length);
-                
-                // Clear previous results
-                activitiesGrid.innerHTML = '';
-                if (groupedActivities.length === 0) {
-                    noResultsMessage.classList.remove('hidden');
-                } else {
-                    noResultsMessage.classList.add('hidden');
-                    groupedActivities.forEach(activity => {
-                        activitiesGrid.appendChild(createActivityCard(activity));
-                    });
-                }
-                return;
-            }
-
             // Filter the activities
             const filteredActivities = activitiesData.filter(classInstance => {
                 const template = classInstance.class_templates;
@@ -504,9 +522,23 @@
                     }
                 }
 
-                // Neighborhood filter
-                if (selectedNeighborhoodId && classInstance.centers?.neighborhood_id != selectedNeighborhoodId) {
-                    return false;
+                // Neighborhood filter - check both center neighborhood AND instance neighborhood field
+                if (selectedNeighborhoodId) {
+                    const centerNeighborhoodMatch = classInstance.centers?.neighborhood_id == selectedNeighborhoodId;
+                    const instanceNeighborhoodName = filterData.neighborhoods.find(n => n.id == selectedNeighborhoodId)?.name;
+                    const instanceNeighborhoodMatch = classInstance.neighborhood === instanceNeighborhoodName;
+                    
+                    if (!centerNeighborhoodMatch && !instanceNeighborhoodMatch) {
+                        console.log('Filtered out by neighborhood:', {
+                            className: template.name,
+                            centerName: classInstance.centers?.name,
+                            centerNeighborhoodId: classInstance.centers?.neighborhood_id,
+                            instanceNeighborhood: classInstance.neighborhood,
+                            selectedNeighborhoodId: selectedNeighborhoodId,
+                            selectedNeighborhoodName: instanceNeighborhoodName
+                        });
+                        return false;
+                    }
                 }
 
                 // Center filter
