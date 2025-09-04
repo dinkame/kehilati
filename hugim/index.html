@@ -523,11 +523,19 @@
             activitiesGrid.innerHTML = '';
 
             if (groupedActivities.length === 0) {
+                console.log('No grouped activities to display');
                 noResultsMessage.classList.remove('hidden');
             } else {
+                console.log('Rendering', groupedActivities.length, 'activity groups');
+                console.log('First few groups:', groupedActivities.slice(0, 3));
                 noResultsMessage.classList.add('hidden');
-                groupedActivities.forEach(activity => {
-                    activitiesGrid.appendChild(createActivityCard(activity));
+                groupedActivities.forEach((activity, index) => {
+                    try {
+                        const card = createActivityCard(activity);
+                        activitiesGrid.appendChild(card);
+                    } catch (error) {
+                        console.error('Error creating card for activity', index, ':', error, activity);
+                    }
                 });
             }
         }
