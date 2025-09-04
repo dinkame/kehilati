@@ -461,6 +461,25 @@
                 selectedCategoryId
             });
 
+            // TEMPORARY: Skip all filtering to see if data displays at all
+            if (searchTerm === '' && !selectedNeighborhoodId && !selectedCenterId && !selectedDay && !selectedAgeGroupId && !selectedCategoryId) {
+                console.log('No filters applied - showing all activities');
+                const groupedActivities = groupActivitiesByTemplate(activitiesData);
+                console.log('Grouped activities count (no filter):', groupedActivities.length);
+                
+                // Clear previous results
+                activitiesGrid.innerHTML = '';
+                if (groupedActivities.length === 0) {
+                    noResultsMessage.classList.remove('hidden');
+                } else {
+                    noResultsMessage.classList.add('hidden');
+                    groupedActivities.forEach(activity => {
+                        activitiesGrid.appendChild(createActivityCard(activity));
+                    });
+                }
+                return;
+            }
+
             // Filter the activities
             const filteredActivities = activitiesData.filter(classInstance => {
                 const template = classInstance.class_templates;
