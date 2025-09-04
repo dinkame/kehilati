@@ -465,8 +465,8 @@
             const filteredActivities = activitiesData.filter(classInstance => {
                 const template = classInstance.class_templates;
                 
-                // Check if template exists and is active
-                if (!template || template.is_active === false) {
+                // Check if template exists
+                if (!template) {
                     return false;
                 }
                 
