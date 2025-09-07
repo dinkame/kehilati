@@ -221,24 +221,17 @@
         const activitiesGrid = document.getElementById('activities-grid');
         const noResultsMessage = document.getElementById('no-results');
 
-        // Function to load data from Supabase - WITH PROGRESS INDICATORS
+        // Function to load data from Supabase
         async function loadData() {
             try {
-                const loadingText = document.getElementById('loading-text');
-                const loadingDetail = document.getElementById('loading-detail');
-                
                 // Show loading overlay
                 loadingOverlay.classList.remove('hidden');
                 errorMessage.classList.add('hidden');
 
                 // Load filter data
-                loadingText.textContent = 'טוען מסננים...';
-                loadingDetail.textContent = 'קוטגוריות, שכונות וגילאים';
                 await loadFilterData();
 
                 // Load classes data
-                loadingText.textContent = 'טוען חוגים...';
-                loadingDetail.textContent = 'מידע חוגים ופרטי קשר';
                 await loadClasses();
 
                 // Hide loading overlay
