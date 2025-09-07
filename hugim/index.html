@@ -9,8 +9,24 @@
     <title>לוח החוגים של השכונה</title>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
+    <!-- Supabase CDN with fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js" 
+            onerror="loadSupabaseFallback()"></script>
+    <script>
+        // Fallback for Supabase CDN
+        function loadSupabaseFallback() {
+            console.warn('Primary Supabase CDN failed, trying fallback...');
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+            script.onerror = function() {
+                console.error('All Supabase CDN sources failed');
+                document.getElementById('loading-overlay').classList.add('hidden');
+                document.getElementById('error-message').classList.remove('hidden');
+                document.querySelector('#error-message p').textContent = 'לא ניתן לטעון את ספריית מסד הנתונים. אנא בדקו את החיבור לאינטרנט.';
+            };
+            document.head.appendChild(script);
+        }
+    </script>
     <style>
         body {
             font-family: 'Assistant', sans-serif;
@@ -221,17 +237,24 @@
         const activitiesGrid = document.getElementById('activities-grid');
         const noResultsMessage = document.getElementById('no-results');
 
-        // Function to load data from Supabase
+        // Function to load data from Supabase - WITH PROGRESS INDICATORS
         async function loadData() {
             try {
+                const loadingText = document.getElementById('loading-text');
+                const loadingDetail = document.getElementById('loading-detail');
+                
                 // Show loading overlay
                 loadingOverlay.classList.remove('hidden');
                 errorMessage.classList.add('hidden');
 
                 // Load filter data
+                loadingText.textContent = 'טוען מסננים...';
+                loadingDetail.textContent = 'קוטגוריות, שכונות וגילאים';
                 await loadFilterData();
 
                 // Load classes data
+                loadingText.textContent = 'טוען חוגים...';
+                loadingDetail.textContent = 'מידע חוגים ופרטי קשר';
                 await loadClasses();
 
                 // Hide loading overlay
