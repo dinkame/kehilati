@@ -60,7 +60,7 @@
                     </p>
                     <p class="text-yellow-600 text-sm mt-1">
                         מצאתן משהו שגוי או חסר? 
-                        <a href="https://wa.me/972527125407" class="underline hover:text-yellow-800">נשמח אם תשלחו הודעה לדינה</a>
+                        נשמח אם תשלחו הודעה לדינה
                     </p>
                 </div>
             </div>
@@ -448,22 +448,31 @@
         }
 
         function getAgeDisplay(template, instances) {
-            // Check if instances have specific age metadata
-            const ageGroups = instances
-                .map(inst => inst.metadata?.age_group)
-                .filter(age => age)
-                .filter((age, index, arr) => arr.indexOf(age) === index) // unique
+            // Collect all unique age information from instances
+            const ageInfo = new Set()
             
-            if (ageGroups.length > 0) {
-                return ageGroups.join(', ')
+            instances.forEach(instance => {
+                // Check for age group in metadata
+                if (instance.metadata?.age_group) {
+                    ageInfo.add(instance.metadata.age_group)
+                }
+                // Check for specific age range in instance
+                else if (instance.age_min !== null && instance.age_max !== null) {
+                    ageInfo.add(`גילאי ${instance.age_min}-${instance.age_max}`)
+                }
+            })
+            
+            // If we found specific age info from instances, use it
+            if (ageInfo.size > 0) {
+                return Array.from(ageInfo).join(', ')
             }
             
-            // Fallback to template age range
+            // Fallback to template information
             if (template.age_min !== null && template.age_max !== null) {
                 return `גילאי ${template.age_min}-${template.age_max}`
             }
             
-            // Fallback to age group label
+            // Final fallback to age group label
             if (template.age_group_label) {
                 return template.age_group_label
             }
