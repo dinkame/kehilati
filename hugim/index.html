@@ -773,11 +773,12 @@
             return card;
         }
 
-        // Event listener for retry button
-        retryButton.addEventListener('click', loadData);
-
-        // Initial setup on page load
-        document.addEventListener('DOMContentLoaded', loadData);
+        // Event listener for retry button - MOVED TO FUNCTION
+        // Initial setup on page load - SAFE DOM READY
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, starting app...');
+            loadData();
+        });
 
     </script>
 </body>
