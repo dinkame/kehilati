@@ -568,7 +568,7 @@
             }
         }
 
-        // Group activities by template ID for display
+        // Group activities by template ID for display - ALWAYS show all ages and days
         function groupActivitiesByTemplate(activities) {
             const grouped = {};
             
@@ -591,7 +591,7 @@
                         ageTags: template.age_groups?.label ? [template.age_groups.label] : [],
                         ageRange: '', 
                         groups: [],
-                        // NEW: Collect contact information
+                        // Collect ALL contact information
                         contact: {
                             centerPhone: classInstance.centers?.phone || '',
                             centerEmail: classInstance.centers?.email || '',
@@ -605,15 +605,27 @@
                     };
                 }
                 
-                // Add this instance as a group/schedule
-                const dayName = dayNames[classInstance.day_of_week] || '';
+                // Add this instance as a group/schedule - ALWAYS ADD, NEVER SKIP
+                const dayName = dayNames[classInstance.day_of_week] || 'לא צוין';
                 const startTime = classInstance.start_time ? classInstance.start_time.substring(0, 5) : '';
                 const endTime = classInstance.end_time ? classInstance.end_time.substring(0, 5) : '';
-                const timeRange = startTime && endTime ? `${startTime}-${endTime}` : startTime;
+                const timeRange = startTime && endTime ? `${startTime}-${endTime}` : startTime || 'לא צוין';
                 const price = classInstance.price || classInstance.class_templates?.base_price;
                 
+                // Get specific age from metadata or use template age range
+                let ageDisplay = '';
+                if (classInstance.metadata?.age_group) {
+                    ageDisplay = classInstance.metadata.age_group;
+                } else if (template.age_min && template.age_max) {
+                    ageDisplay = `גילאי ${template.age_min}-${template.age_max}`;
+                } else if (grouped[key].ageTags.length > 0) {
+                    ageDisplay = grouped[key].ageTags.join(', ');
+                } else {
+                    ageDisplay = 'כל הגילאים';
+                }
+                
                 grouped[key].groups.push({
-                    age: classInstance.metadata?.age_group || grouped[key].ageRange || grouped[key].ageTags.join(', '),
+                    age: ageDisplay,
                     day: dayName,
                     time: timeRange,
                     price: price ? `${price} ₪` : ''
@@ -628,58 +640,83 @@
             const card = document.createElement('div');
             card.className = 'bg-white p-6 rounded-2xl shadow-lg border-t-4 border-emerald-500 hover:shadow-xl transition-shadow duration-300';
             
-            // Prepare groups list
+            // Prepare groups list - always show ALL age groups and days
             const groupsHtml = activity.groups.map(group => `
-                <li class="flex justify-between items-center mb-1 text-sm text-gray-700">
-                    <span class="font-semibold">${group.age}</span>
-                    <span class="text-right">${group.day} - ${group.time}${group.price ? ` (${group.price})` : ''}</span>
+                <li class="flex justify-between items-center mb-1 text-sm text-gray-700 p-1 bg-white rounded border">
+                    <span class="font-semibold text-right">${group.age}</span>
+                    <span class="text-center">${group.day}</span>
+                    <span class="text-left">${group.time}${group.price ? ` (${group.price})` : ''}</span>
                 </li>
             `).join('');
 
-            // Contact information display (text only + WhatsApp)
-            const contactItems = [];
-            
-            // Add instructor phone as text
-            if (activity.contact.instructorPhone) {
-                contactItems.push(`<span class="text-sm text-gray-700"><strong>מדריך:</strong> ${activity.contact.instructorPhone}</span>`);
-            }
-            
-            // Add center phone as text
-            if (activity.contact.centerPhone) {
-                contactItems.push(`<span class="text-sm text-gray-700"><strong>מרכז:</strong> ${activity.contact.centerPhone}</span>`);
-            }
-            
-            // Add instructor email as text
-            if (activity.contact.instructorEmail) {
-                contactItems.push(`<span class="text-sm text-gray-700"><strong>אימייל מדריך:</strong> ${activity.contact.instructorEmail}</span>`);
-            }
-            
-            // Add center email as text
-            if (activity.contact.centerEmail) {
-                contactItems.push(`<span class="text-sm text-gray-700"><strong>אימייל מרכז:</strong> ${activity.contact.centerEmail}</span>`);
-            }
-
-            const contactHtml = contactItems.length > 0 ? `
-                <div class="mt-4 p-3 bg-gray-50 rounded-md">
-                    <div class="flex flex-col gap-1">
-                        ${contactItems.join('')}
-                    </div>
-                    ${activity.contact.instructorPhone ? `
-                        <div class="mt-3 flex justify-center">
-                            <a href="https://wa.me/972${activity.contact.instructorPhone.replace(/^0/, '').replace(/[^0-9]/g, '')}" 
+            // Unified contact information display
+            const buildContactSection = () => {
+                let contactHtml = '<div class="mt-4 p-3 bg-gray-50 rounded-md">';
+                contactHtml += '<h5 class="font-semibold text-gray-800 mb-2">פרטי קשר:</h5>';
+                
+                // Always show instructor name if available
+                if (activity.instructor) {
+                    contactHtml += `<div class="mb-2"><span class="text-sm font-medium text-gray-800">מדריך: ${activity.instructor}</span></div>`;
+                }
+                
+                // Instructor contact details
+                const instructorDetails = [];
+                if (activity.contact.instructorPhone) {
+                    instructorDetails.push(`<span class="text-sm text-gray-700"><strong>טלפון:</strong> ${activity.contact.instructorPhone}</span>`);
+                }
+                if (activity.contact.instructorEmail) {
+                    instructorDetails.push(`<span class="text-sm text-gray-700"><strong>אימייל:</strong> ${activity.contact.instructorEmail}</span>`);
+                }
+                
+                if (instructorDetails.length > 0) {
+                    contactHtml += '<div class="flex flex-col gap-1 mb-3">' + instructorDetails.join('') + '</div>';
+                }
+                
+                // WhatsApp button (always centered if available)
+                if (activity.contact.instructorPhone) {
+                    const cleanPhone = activity.contact.instructorPhone.replace(/^0/, '').replace(/[^0-9]/g, '');
+                    contactHtml += `
+                        <div class="flex justify-center mb-3">
+                            <a href="https://wa.me/972${cleanPhone}" 
                                target="_blank"
-                               class="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200">
+                               class="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 text-sm">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.513"/>
                                 </svg>
-                                <span>שלח הודעת וואטסאפ</span>
+                                <span>וואטסאפ למדריך</span>
                             </a>
                         </div>
-                    ` : ''}
-                </div>
-            ` : '';
+                    `;
+                }
+                
+                // Center contact (only if different from instructor)
+                const centerDetails = [];
+                const isDifferentCenter = (activity.contact.centerPhone && activity.contact.centerPhone !== activity.contact.instructorPhone) ||
+                                        (activity.contact.centerEmail && activity.contact.centerEmail !== activity.contact.instructorEmail);
+                
+                if (isDifferentCenter) {
+                    contactHtml += '<hr class="my-2 border-gray-300">';
+                    contactHtml += `<div class="mb-1"><span class="text-sm font-medium text-gray-800">מרכז: ${activity.center}</span></div>`;
+                    
+                    if (activity.contact.centerPhone && activity.contact.centerPhone !== activity.contact.instructorPhone) {
+                        centerDetails.push(`<span class="text-sm text-gray-700"><strong>טלפון מרכז:</strong> ${activity.contact.centerPhone}</span>`);
+                    }
+                    if (activity.contact.centerEmail && activity.contact.centerEmail !== activity.contact.instructorEmail) {
+                        centerDetails.push(`<span class="text-sm text-gray-700"><strong>אימייל מרכז:</strong> ${activity.contact.centerEmail}</span>`);
+                    }
+                    
+                    if (centerDetails.length > 0) {
+                        contactHtml += '<div class="flex flex-col gap-1">' + centerDetails.join('') + '</div>';
+                    }
+                }
+                
+                contactHtml += '</div>';
+                return contactHtml;
+            };
 
-            // NEW: Prepare address information if available
+            const contactHtml = buildContactSection();
+
+            // Prepare address information if available
             const addressHtml = activity.contact.centerAddress ? `
                 <div class="text-xs text-gray-500 mt-2 bg-gray-50 p-2 rounded-md">
                     <strong>כתובת:</strong> ${activity.contact.centerAddress}
@@ -688,15 +725,20 @@
 
             card.innerHTML = `
                 <h3 class="text-xl font-bold text-gray-900 mb-2">${activity.name}</h3>
-                <p class="text-gray-600 mb-2"><strong>מרכז:</strong> ${activity.center}</p>
-                <p class="text-gray-600 mb-2"><strong>מדריך:</strong> ${activity.instructor}</p>
-                <p class="text-gray-600 mb-4"><strong>מיקום:</strong> ${activity.location}</p>
-                
-                ${activity.description ? `<p class="text-sm text-gray-500 mb-4">${activity.description}</p>` : ''}
+                <div class="text-gray-600 mb-4 space-y-1">
+                    <p><strong>מרכז:</strong> ${activity.center}</p>
+                    <p><strong>מיקום:</strong> ${activity.location}</p>
+                    ${activity.description ? `<p class="text-sm text-gray-500 italic mt-2">${activity.description}</p>` : ''}
+                </div>
 
-                <div class="bg-gray-50 p-3 rounded-xl mb-4">
-                    <h4 class="font-bold text-sm text-gray-800 mb-2">קבוצות:</h4>
-                    <ul class="list-none m-0 p-0">
+                <div class="bg-blue-50 p-3 rounded-xl mb-4">
+                    <h4 class="font-bold text-sm text-gray-800 mb-2 flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        לוח זמנים וגילאים:
+                    </h4>
+                    <ul class="list-none m-0 p-0 space-y-1">
                         ${groupsHtml}
                     </ul>
                 </div>
