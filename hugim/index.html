@@ -481,7 +481,10 @@
         }
 
         function getScheduleDisplay(instances) {
-            const schedules = instances.map(instance => {
+            // מיין את המופעים לפי יום השבוע (ראשון = 1, שני = 2, וכו')
+            const sortedInstances = [...instances].sort((a, b) => a.day_of_week - b.day_of_week)
+            
+            const schedules = sortedInstances.map(instance => {
                 const day = dayNames[instance.day_of_week] || 'לא צוין'
                 const startTime = instance.start_time ? instance.start_time.substring(0, 5) : ''
                 const endTime = instance.end_time ? instance.end_time.substring(0, 5) : ''
