@@ -480,9 +480,19 @@
             return 'כל הגילאים'
         }
 
-        function getScheduleDisplay(instances) {
-            // מיין את המופעים לפי יום השבוע (ראשון = 1, שני = 2, וכו')
-            const sortedInstances = [...instances].sort((a, b) => a.day_of_week - b.day_of_week)
+       function getScheduleDisplay(instances) {
+            // מיין קודם לפי יום השבוע, ואז לפי שעת התחלה
+            const sortedInstances = [...instances].sort((a, b) => {
+                // קודם לפי יום השבוע
+                if (a.day_of_week !== b.day_of_week) {
+                    return a.day_of_week - b.day_of_week
+                }
+                
+                // אם אותו יום, מיין לפי שעת התחלה
+                const timeA = a.start_time || '00:00'
+                const timeB = b.start_time || '00:00'
+                return timeA.localeCompare(timeB)
+            })
             
             const schedules = sortedInstances.map(instance => {
                 const day = dayNames[instance.day_of_week] || 'לא צוין'
