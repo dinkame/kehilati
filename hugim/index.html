@@ -388,7 +388,9 @@
             grid.innerHTML = groupedActivities.map(group => createActivityCard(group)).join('')
         }
 
-        function getDisplayLocation(classData) {
+       function getDisplayLocation(classData) {
+            console.log('getDisplayLocation called with:', classData.class_name, classData.location, classData.center_name, classData.neighborhood);
+            
             // אם יש location מוגדר (כמו כתובת פרטית) - השתמש בו
             if (classData.location && classData.location.trim() !== '' && classData.location !== 'לא צוין') {
                 return classData.location;
@@ -445,11 +447,9 @@
                         
                         <div class="space-y-3">
                             <div class="flex items-center text-gray-700">
-                                <svg class="h-5 w-5 text-emerald-600 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
+                                <span class="text-emerald-600 ml-2 text-lg">${getLocationIcon(template)}</span>
                                 <span>${getDisplayLocation(template)}</span>
+                                ${template.location_type === 'private_home' ? '<span class="text-xs text-gray-500 mr-2">(מיקום פרטי)</span>' : ''}
                             </div>
                             
                             <div class="flex items-center text-gray-700">
@@ -508,9 +508,14 @@
             return 'כל הגילאים'
         }
 
-       function getScheduleDisplay(instances) {
+      function getScheduleDisplay(instances) {
             // מיין קודם לפי יום השבוע, ואז לפי שעת התחלה
             const sortedInstances = [...instances].sort((a, b) => {
+                // אם אין יום בשבוע (מיקום גמיש), שים בסוף
+                if (a.day_of_week === null && b.day_of_week !== null) return 1;
+                if (a.day_of_week !== null && b.day_of_week === null) return -1;
+                if (a.day_of_week === null && b.day_of_week === null) return 0;
+                
                 // קודם לפי יום השבוע
                 if (a.day_of_week !== b.day_of_week) {
                     return a.day_of_week - b.day_of_week
@@ -523,6 +528,11 @@
             })
             
             const schedules = sortedInstances.map(instance => {
+                // אם אין יום בשבוע - זה מיקום גמיש
+                if (instance.day_of_week === null) {
+                    return 'לוח זמנים גמיש לפי תיאום';
+                }
+                
                 const day = dayNames[instance.day_of_week] || 'לא צוין'
                 const startTime = instance.start_time ? instance.start_time.substring(0, 5) : ''
                 const endTime = instance.end_time ? instance.end_time.substring(0, 5) : ''
